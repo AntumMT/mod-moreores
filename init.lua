@@ -22,6 +22,12 @@ if minetest.get_modpath("mg") then
 	dofile(modpath .. "/mg.lua")
 end
 
+local tool_wear = minetest.settings:get_bool('enable_tool_wear')
+if tool_wear == nil then
+	-- Default is enabled
+	tool_wear = true
+end
+
 -- `frame` support
 local use_frame = minetest.get_modpath("frame")
 
@@ -333,6 +339,42 @@ local function add_ore(modname, description, mineral_name, oredef, extra_node_de
 	end
 end
 
+
+local t_uses = {}
+if tool_wear then
+	t_uses.pick_silver = 100
+	t_uses.pick_gold = 150
+	t_uses.pick_mithril = 3126
+	t_uses.hoe_silver = 150
+	t_uses.hoe_gold = 750
+	t_uses.hoe_mithril = 2000
+	t_uses.shovel_silver = 100
+	t_uses.shovel_gold = 150
+	t_uses.shovel_mithril = 3126
+	t_uses.axe_silver = 100
+	t_uses.axe_gold = 150
+	t_uses.axe_mithril = 3126
+	t_uses.sword_silver = 100
+	t_uses.sword_gold = 150
+	t_uses.sword_mithril = 3126
+else
+	t_uses.pick_silver = 0
+	t_uses.pick_mithril = 0
+	t_uses.pick_gold = 0
+	t_uses.hoe_silver = 0
+	t_uses.hoe_gold = 0
+	t_uses.hoe_mithril = 0
+	t_uses.shovel_silver = 0
+	t_uses.shovel_gold = 0
+	t_uses.shovel_mithril = 0
+	t_uses.axe_silver = 0
+	t_uses.axe_gold = 0
+	t_uses.axe_mithril = 0
+	t_uses.sword_silver = 0
+	t_uses.sword_gold = 0
+	t_uses.sword_mithril = 0
+end
+
 local oredefs = {
 	silver = {
 		description = "Silver",
@@ -361,7 +403,7 @@ local oredefs = {
 		tools = {
 			pick = {
 				groupcaps = {
-					cracky = {times = {[1] = 2.60, [2] = 1.00, [3] = 0.60}, uses = 100, maxlevel = 1},
+					cracky = {times = {[1] = 2.60, [2] = 1.00, [3] = 0.60}, uses = t_uses.pick_silver, maxlevel = 1},
 				},
 				damage_groups = {fleshy = 4},
 				groups = {dig_speed_class=4, enchantability=14},
@@ -370,11 +412,11 @@ local oredefs = {
 			},
 			},
 			hoe = {
-				max_uses = 150,
+				max_uses = t_uses.hoe_silver,
 			},
 			shovel = {
 				groupcaps = {
-					crumbly = {times = {[1] = 1.10, [2] = 0.40, [3] = 0.25}, uses = 100, maxlevel = 1},
+					crumbly = {times = {[1] = 1.10, [2] = 0.40, [3] = 0.25}, uses = t_uses.shovel_silver, maxlevel = 1},
 				},
 				damage_groups = {fleshy = 3},
 				groups = {dig_speed_class=4, enchantability=14},
@@ -384,8 +426,8 @@ local oredefs = {
 			},
 			axe = {
 				groupcaps = {
-					choppy = {times = {[1] = 2.50, [2] = 0.80, [3] = 0.50}, uses = 100, maxlevel = 1},
-					fleshy = {times = {[2] = 1.10, [3] = 0.60}, uses = 100, maxlevel = 1},
+					choppy = {times = {[1] = 2.50, [2] = 0.80, [3] = 0.50}, uses = t_uses.axe_silver, maxlevel = 1},
+					fleshy = {times = {[2] = 1.10, [3] = 0.60}, uses = t_uses.axe_silver, maxlevel = 1},
 				},
 				damage_groups = {fleshy = 5},
 				groups = {dig_speed_class=4, enchantability=14},
@@ -395,9 +437,9 @@ local oredefs = {
 			},
 			sword = {
 				groupcaps = {
-					fleshy = {times = {[2] = 0.70, [3] = 0.30}, uses = 100, maxlevel = 1},
-					snappy = {times = {[1] = 1.70, [2] = 0.70, [3] = 0.30}, uses = 100, maxlevel = 1},
-					choppy = {times = {[3] = 0.80}, uses = 100, maxlevel = 0},
+					fleshy = {times = {[2] = 0.70, [3] = 0.30}, uses = t_uses.sword_silver, maxlevel = 1},
+					snappy = {times = {[1] = 1.70, [2] = 0.70, [3] = 0.30}, uses = t_uses.sword_silver, maxlevel = 1},
+					choppy = {times = {[3] = 0.80}, uses = t_uses.sword_silver, maxlevel = 0},
 				},
 				damage_groups = {fleshy = 6},
 				_mcl_diggroups = {
@@ -421,22 +463,22 @@ local oredefs = {
 		oredef = {},
 		tools = {
 			pick = {
-				cracky = {times = {[1] = 2.45, [2] = 0.75, [3] = 0.50}, uses = 150, maxlevel= 1}
+				cracky = {times = {[1] = 2.45, [2] = 0.75, [3] = 0.50}, uses = t_uses.pick_gold, maxlevel= 1}
 			},
 			hoe = {
-				max_uses = 750
+				max_uses = t_uses.hoe_gold
 			},
 			shovel = {
-				crumbly = {times = {[1] = 0.90, [2] = 0.37, [3] = 0.23}, uses = 150, maxlevel= 1}
+				crumbly = {times = {[1] = 0.90, [2] = 0.37, [3] = 0.23}, uses = t_uses.shovel_gold, maxlevel= 1}
 			},
 			axe = {
-				choppy = {times = {[1] = 2.10, [2] = 0.60, [3] = 0.47}, uses = 150, maxlevel= 1},
-				fleshy = {times = {[2] = 1.05, [3] = 0.45}, uses = 150, maxlevel= 1}
+				choppy = {times = {[1] = 2.10, [2] = 0.60, [3] = 0.47}, uses = t_uses.axe_gold, maxlevel= 1},
+				fleshy = {times = {[2] = 1.05, [3] = 0.45}, uses = t_uses.axe_gold, maxlevel= 1}
 			},
 			sword = {
-				fleshy = {times = {[2] = 0.67, [3] = 0.27}, uses = 150, maxlevel= 1},
-				snappy = {times = {[2] = 0.70, [3] = 0.27}, uses = 150, maxlevel= 1},
-				choppy = {times = {[3] = 0.72}, uses = 150, maxlevel= 0}
+				fleshy = {times = {[2] = 0.67, [3] = 0.27}, uses = t_uses.sword_gold, maxlevel= 1},
+				snappy = {times = {[2] = 0.70, [3] = 0.27}, uses = t_uses.sword_gold, maxlevel= 1},
+				choppy = {times = {[3] = 0.72}, uses = t_uses.sword_gold, maxlevel= 0}
 			},
 		},
 		full_punch_interval = 0.90,
@@ -469,7 +511,7 @@ local oredefs = {
 		tools = {
 			pick = {
 				groupcaps = {
-					cracky = {times = {[1] = 2.60, [2] = 1.00, [3] = 0.60}, uses = 3126, maxlevel = 3},
+					cracky = {times = {[1] = 2.60, [2] = 1.00, [3] = 0.60}, uses = t_uses.pick_mithril, maxlevel = 3},
 				},
 				damage_groups = {fleshy = 6},
 				groups = {dig_speed_class=5, enchantability=10},
@@ -478,11 +520,11 @@ local oredefs = {
 				},
 			},
 			hoe = {
-				max_uses = 2000,
+				max_uses = t_uses._mithril,
 			},
 			shovel = {
 				groupcaps = {
-					crumbly = {times = {[1] = 1.10, [2] = 0.40, [3] = 0.25}, uses = 3126, maxlevel = 3},
+					crumbly = {times = {[1] = 1.10, [2] = 0.40, [3] = 0.25}, uses = t_uses.shovel_mithril, maxlevel = 3},
 				},
 				damage_groups = {fleshy = 6},
 				groups = {dig_speed_class=5, enchantability=10},
@@ -492,8 +534,8 @@ local oredefs = {
 			},
 			axe = {
 				groupcaps = {
-					choppy = {times = {[1] = 2.50, [2] = 0.80, [3] = 0.50}, uses = 3126, maxlevel = 3},
-					fleshy = {times = {[2] = 1.10, [3] = 0.60}, uses = 3126, maxlevel = 3},
+					choppy = {times = {[1] = 2.50, [2] = 0.80, [3] = 0.50}, uses = t_uses.axe_mithril, maxlevel = 3},
+					fleshy = {times = {[2] = 1.10, [3] = 0.60}, uses = t_uses.axe_mithril, maxlevel = 3},
 				},
 				damage_groups = {fleshy = 10},
 				groups = {dig_speed_class=5, enchantability=10},
@@ -503,9 +545,9 @@ local oredefs = {
 			},
 			sword = {
 				groupcaps = {
-					fleshy = {times = {[2] = 0.70, [3] = 0.30}, uses = 3126, maxlevel = 3},
-					snappy = {times = {[1] = 1.70, [2] = 0.70, [3] = 0.30}, uses = 3126, maxlevel = 3},
-					choppy = {times = {[3] = 0.80}, uses = 3126, maxlevel = 0},
+					fleshy = {times = {[2] = 0.70, [3] = 0.30}, uses = t_uses.sword_mithril, maxlevel = 3},
+					snappy = {times = {[1] = 1.70, [2] = 0.70, [3] = 0.30}, uses = t_uses.sword_mithril, maxlevel = 3},
+					choppy = {times = {[3] = 0.80}, uses = t_uses.sword_mithril, maxlevel = 0},
 				},
 				damage_groups = {fleshy = 7},
 				_mcl_diggroups = {
