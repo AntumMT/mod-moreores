@@ -85,6 +85,13 @@ local function get_recipe(material, item)
 			{"", "group:stick", ""},
 		}
 	end
+	if item == "hoe" then
+		return {
+			{material, material, ""},
+			{"", "group:stick", ""},
+			{"", "group:stick", ""},
+		}
+	end
 	if item == "block" then
 		return {
 			{material, material, material},
